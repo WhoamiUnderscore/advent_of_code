@@ -1,0 +1,73 @@
+#include<stdio.h>
+#include<string.h>
+
+char VOWELS[6] = "aeiou";
+const char* EXCLUDE_CHARS[4] = { "ab", "cd", "pq", "xy" };
+
+bool value_contain_exclude_chars(char* val) {
+  int len = sizeof(val) / sizeof(val[0]);
+
+  for ( size_t i = 0; i < len; i++ ) {
+    if ( val == EXCLUDE_CHARS[i] ) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool is_input_valid(char* input) {
+  int voyel_count = 0;
+  bool has_double_letter = false;
+  bool contain_exclude_char = false;
+
+  for ( int i = 0; input[i] != '\0'; i++ ) {
+    for ( int j = i; j < i+1; j++ ) {
+      char letter1 = input[j];
+      char letter2 = input[j+1];
+
+      if ( letter1 == letter2 ) {
+        has_double_letter = true;
+      }
+
+      char val[3] = { letter1, letter2, '\0' };
+      if ( !contain_exclude_char && value_contain_exclude_chars(val) ) {
+        contain_exclude_char = true;
+      }
+
+      if ( strchr(VOWELS, letter1 ) ) {
+        voyel_count++;
+      }
+
+      if ( strchr(VOWELS, letter2 ) ) {
+        voyel_count++;
+      }
+    }
+  }
+
+
+  return voyel_count >= 3 && has_double_letter && !contain_exclude_char;
+}
+
+int main() {
+  FILE *file = fopen("data", "r");
+
+  char input[20];
+  int counter = 0;
+
+  char* string = "ugknbfddgicrmopn\0"
+
+  // if ( file != NULL) {
+  //   while( fgets(input, sizeof(input), file) ) {
+  if ( is_input_valid(string) ) {
+    counter++;
+  }
+  //   }
+  //
+  //   fclose(file);
+  // }
+
+  printf("%d\n", counter);
+
+  return 0;
+}
